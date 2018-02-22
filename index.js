@@ -11,19 +11,17 @@ class ApiEntry {
      * @param url The URL we have built up to this point
      * @returns {Proxy}
      */
-    constructor(parent, url){
-        return new Proxy({
-            parent,
-            url
-        }, this);
+    constructor(parent, url) {
+        return new Proxy(Object.assign(new Function(), {parent, url}), this);
     }
 
-    call(target, thisArg, args){
+    call(target, thisArg, args) {
         return fetch(this.path)
     }
 
-    get(target, prop){
-        return new ApiEntry(this.parent, url.resolve(this.url, prop))
+    get(target, prop) {
+        if (prop instanceof String)
+            return new ApiEntry(target.parent, url.resolve(target.url, prop))
     }
 }
 
@@ -54,7 +52,7 @@ class ScryfallApiClient {
         })
     }
 
-    get cards(){
+    get cards() {
         console.log(API_ROOT);
         return new ApiEntry(this, url.resolve(API_ROOT, 'cards'));
     }

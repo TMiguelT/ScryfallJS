@@ -1,3 +1,4 @@
 const Scry = require('./index');
 const s = new Scry();
-console.log(s.cards);
+
+s.cards().then(x => console.log(x))
